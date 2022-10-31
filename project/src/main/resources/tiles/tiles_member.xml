@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+   <definition name="baseLayout"  template="/WEB-INF/views/common/layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header(login).jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/common/postIt.jsp" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+   </definition>
+
+	<!-- 최초 접속시 보이는 메인페이지 -->
+   <definition name="main" extends="baseLayout">
+      <put-attribute name="title" value="메인페이지" />
+      <put-attribute name="side" value="" />
+      <put-attribute name="body" value="/WEB-INF/views/main.jsp" />
+   </definition>
+   
+   <!-- 로그인 후 보이는 메인페이지(일반유저) -->
+   <definition name="main2" extends="baseLayout">
+      <put-attribute name="title" value="메인페이지" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header(logout).jsp" />
+      <put-attribute name="body" value="/WEB-INF/views/main.jsp" />
+   </definition>
+   
+   <!-- 로그인 후 보이는 메인페이지(admin) -->
+   <definition name="main_admin" extends="baseLayout">
+      <put-attribute name="title" value="관리자메인페이지" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header(logout)_admin.jsp" />
+      <put-attribute name="side" value="" />
+      <put-attribute name="body" value="/WEB-INF/views/main.jsp" />
+   </definition>
+   
+   <!-- 메인에서 로그인 버튼 누를면 로그인 페이지로  -->
+   <definition name="signIn" extends="baseLayout">
+      <put-attribute name="title" value="로그인페이지" />
+      <put-attribute name="side" value="" />
+      <put-attribute name="body" value="/WEB-INF/views/signupin/signIn.jsp" />
+   </definition>
+   
+   <!-- 회원가입 페이지로  -->
+   <definition name="signUp" extends="baseLayout">
+      <put-attribute name="title" value="회원가입페이지" />
+      <put-attribute name="side" value="" />
+      <put-attribute name="body" value="/WEB-INF/views/signupin/signUp.jsp" />
+   </definition>
+   
+    <!-- 팀디테일 페이지  -->
+   <definition name="teamDetail" extends="baseLayout">
+      <put-attribute name="title" value="팀정보페이지" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header(logout).jsp" />
+      <put-attribute name="side" value="" />
+      <put-attribute name="body" value="/WEB-INF/views/teamPage/teamDetail.jsp" />
+   </definition>
+<!-- <<<<<<< .merge_file_a04088 -->
+
+   <!-- 마이스터디 페이지로  -->
+<!-- ======= -->
+
+   <!-- 마이스터디 페이지  -->
+<!-- >>>>>>> .merge_file_a13196 -->
+   <definition name="myStudy" extends="baseLayout">
+      <put-attribute name="title" value="마이스터디페이지" />
+      <put-attribute name="side" value="" />
+      <put-attribute name="body" value="/WEB-INF/views/mystudy/myStudy.jsp" />
+   </definition>   
+<!-- <<<<<<< .merge_file_a04088 -->
+<!-- ======= -->
+   
+   <!-- 마이스터디 페이지  -->
+   <definition name="modMemo" extends="baseLayout">
+      <put-attribute name="title" value="메모수정페이지" />
+      <put-attribute name="side" value="" />
+      <put-attribute name="body" value="/WEB-INF/views/mystudy/modMemo.jsp" />
+   </definition> 
+<!-- >>>>>>> .merge_file_a13196 -->
+
+</tiles-definitions>

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="mapper.team">
+
+<!-- SELECT -->
+
+	<select id="myTeamList" resultType="myTeamListDTO" parameterType="int">
+		SELECT a.t_number, a.T_KEY,a.T_NAME,a.T_FIELD , t.USERKEY,to_char(t.TM_JOINDATE,'YYYY-MM-DD')AS TM_JOINDATE  FROM TEAMMEMBER t , ALLTEAM a
+		WHERE t.T_KEY = a.T_KEY AND t.userkey= #{userkey}
+		order by t.TM_JOINDATE
+	</select>
+	
+	<select id="teamInfo" resultType="teamInfoDTO" parameterType="int">
+		SELECT a.T_KEY ,a.T_NAME ,a.T_INTRO ,a.T_FIELD ,a.T_NUMBER ,a.T_LMEMO ,a.T_CREATE ,a.USERKEY ,a2.NICKNAME   
+		FROM ALLTEAM a ,allmember a2
+		WHERE a.USERKEY = a2.USERKEY and t_key = #{t_key}
+	</select>
+	
+	<select id="teamMemberInfo" resultType="teamMemberDTO" parameterType="int">
+		SELECT m.T_KEY, m.TM_KEY , m.TM_JOINDATE ,m.USERKEY ,a.NICKNAME ,a.LASTTIME ,a.INTRO , a.photo 
+		FROM teammember m, allmember a
+		WHERE m.USERKEY = a.USERKEY AND m.T_KEY = #{t_key}
+	</select>
+	
+	<select id="allTeamList" resultType="teamInfoDTO" parameterType="teamInfoDTO">
+		SELECT a.T_KEY ,a.T_NAME ,a.T_INTRO ,a.T_FIELD ,a.T_NUMBER  ,a2.NICKNAME 
+		FROM ALLTEAM a ,allmember a2
+		<where>
+		 a.USERKEY = a2.USERKEY
+		 <if test='t_field gt 0'>
+		 and a.t_field = #{t_field}
+		 </if>
+		 <if test='t_name != null'>
+		 and lower(a.t_name) like '%' || lower(#{t_name}) || '%'
+		 </if>
+		</where>
+		order by a.t_create desc
+	</select>
+	
+	<select id="anyAlarm" resultType="int" parameterType="int">
+		SELECT count(*) FROM memberrequest
+		WHERE t_key=#{t_key} AND tr_result='M'
+	</select>
+	
+	<select id="getRequestList" resultType="memberRequestDTO" parameterType="int">
+		SELECT m.TR_KEY,m.USERKEY ,m.T_KEY ,a.NICKNAME FROM memberRequest m , ALLMEMBER a 
+		WHERE m.userkey = a.userkey AND tr_result ='M' AND t_key = #{t_key}
+	</select>
+	
+	<select id="getMemberCount" resultType="int" parameterType="int">
+		SELECT count(*) FROM TEAMMEMBER
+		WHERE t_key = #{t_key}
+	</select>
+	
+	<select id="alreadyRequest" resultType="int" parameterType="memberRequestDTO">
+		SELECT count(*) FROM memberrequest
+		WHERE t_key=#{t_key} AND userkey= #{userKey} AND tr_result ='M'
+	</select>
+	
+	<select id="addNewTeam_teamkey" resultType="int" parameterType="teamInfoDTO">
+		select t_key from allteam
+		where t_name= #{t_name}
+	</select>
+	
+	<select id="getTDay" resultType="String" parameterType="int">
+		select to_char(t_day, 'YYYY-MM-DD')AS t_day from allteam
+		where t_key = #{t_key}
+	</select>
+	
+	<select id="existTeamName" resultType="int" parameterType="String">
+		SELECT count(*) FROM ALLteam
+		WHERE t_name = #{t_name}
+	</select>
+	
+	<select id="getMyRequest_wait" resultType="memberRequestDTO" parameterType="int">
+		SELECT m.tr_key,m.userkey,m.T_KEY,a.T_NAME ,a.T_FIELD  FROM memberRequest m, ALLTEAM a 
+		WHERE TR_RESULT ='M' AND m.T_KEY = a.T_KEY and m.userkey=#{userKey}
+	</select>
+	
+	<select id="getMyRequest_reject" resultType="memberRequestDTO" parameterType="int">
+		SELECT m.tr_key,m.userkey,m.T_KEY,a.T_NAME ,a.T_FIELD  FROM memberRequest m, ALLTEAM a 
+		WHERE TR_RESULT ='N' AND m.T_KEY = a.T_KEY and m.userkey=#{userKey}
+	</select>
+	
+	<select id="getLatestChallenge" resultType="challengeDTO" parameterType="int">
+		SELECT * 
+		FROM (SELECT * FROM TEAMCHALLENGE 
+			WHERE t_key = #{t_key}
+			ORDER BY tc_key DESC)
+		WHERE rownum <![CDATA[<= 1]]>
+	</select>
+	
+	<select id="getChallengeList" resultType="challengeDTO" parameterType="int">
+		SELECT * from TCSummary
+		where tc_key = #{tc_key} and userKey = #{userKey}
+		order by tcs_key
+	</select>
+	
+	<select id="getSummary" resultType="challengeDTO" parameterType="challengeDTO">
+		SELECT s.TCS_KEY ,s.USERKEY ,s.TCS_SUMMARY ,t.TC_KEY ,t.TC_TITLE ,t.T_KEY  from TCSummary s, TeamChallenge t
+		where t.tc_key = s.tc_key and s.tcs_key = #{tcs_key}
+	</select>
+	
+	<select id="getMyHistory" resultType="challengeDTO" parameterType="challengeDTO">
+			SELECT DISTINCT t.TC_KEY ,t.TC_TITLE ,t.T_KEY , s.USERKEY, count(TCS_KEY)AS length  FROM TEAMCHALLENGE t , TCSUMMARY s
+			WHERE t.TC_KEY = s.TC_KEY AND t_key = #{t_key} AND userkey = #{userKey}
+			GROUP BY t.TC_KEY,t.TC_TITLE,t.t_key,s.USERKEY 
+			ORDER BY tc_key DESC
+	</select>
+	
+	<select id="getTCkey" resultType="int" parameterType="int">
+			SELECT TC_KEY FROM TEAMCHALLENGE t 
+			WHERE T_KEY = #{t_key}
+	</select>
+	
+	<select id="getMainTeamList" resultType="teamInfoDTO" >
+		SELECT *
+		FROM (SELECT a.T_KEY ,a.T_NAME ,a.T_INTRO ,a.T_FIELD ,a.T_NUMBER  ,a2.NICKNAME, a.t_create  FROM ALLTEAM a ,allmember a2
+		WHERE a.userkey = a2.userkey
+		order by a.t_create DESC)
+		WHERE rownum <![CDATA[<= 10]]>
+	</select>
+	
+	<select id="alreadyToday" resultType="int" parameterType="challengeDTO">
+		SELECT count(*) FROM TCSUMMARY
+		WHERE tc_key = #{tc_key} AND to_char(tcs_date,'YYYY-MM-DD')= #{tcs_date} AND USERKEY = #{userKey}
+	</select>
+	
+	<select id="getPhoto" resultType="String" parameterType="int">
+		SELECT photo FROM allmember
+		WHERE USERKEY = #{userKey}
+	</select>
+
+<!-- UPDATE -->
+	
+	<update id="updateTeamInfo" parameterType="teamInfoDTO">
+		update AllTeam
+		set t_intro= #{t_intro} ,t_field=#{t_field},userKey=#{userKey}
+		where t_key= #{t_key}
+	</update>
+	
+	<update id="updateMemberCount" parameterType="teamInfoDTO">
+		update allteam
+		set t_number = #{t_number}
+		where t_key = #{t_key}
+	</update>
+	
+	<update id="updateLMemo" parameterType="teamInfoDTO">
+		update AllTeam
+		set t_lmemo= #{t_lMemo}
+		where t_key= #{t_key}
+	</update>
+
+	<update id="accpetMember" parameterType="memberRequestDTO">
+		UPDATE MEMBERREQUEST 
+		SET TR_RESULT = 'Y'
+		WHERE userKey = #{userKey} AND t_key = #{t_key}
+	</update>
+	
+	<update id="rejectMember" parameterType="memberRequestDTO">
+		UPDATE MEMBERREQUEST 
+		SET TR_RESULT = 'N'
+		WHERE userKey = #{userKey} AND t_key = #{t_key}
+	</update>
+	
+	<update id="updateDday" parameterType="teamInfoDTO">
+		update AllTeam
+		set t_day= #{t_day}
+		where t_key= #{t_key}
+	</update>
+	
+	<update id="reviseSummary" parameterType="challengeDTO">
+		update TCSummary
+		set tcs_summary= #{tcs_summary}
+		where tcs_key= #{tcs_key}
+	</update>
+	
+	<update id="updateChallengeTitle" parameterType="challengeDTO">
+		update TEAMCHALLENGE
+		set tc_title= #{tc_title}
+		where tc_key= #{tc_key}
+	</update>
+
+	<update id="setPhoto" parameterType="profileUpdateDTO">
+		update ALLMEMBER
+		set photo = #{photo}
+		where userKey = #{userKey}
+	</update>
+	
+<!-- INSERT -->
+
+	<insert id="memberRequest" parameterType="memberRequestDTO">
+		insert into memberrequest
+		(tr_key,UserKey,tr_result,t_key)
+		values(tr_key_seq.nextval,#{userKey},'M',#{t_key})
+	</insert>
+	
+	<insert id="addTeamMember" parameterType="memberRequestDTO">
+		insert into teammember
+		(tm_key,t_key,tm_joindate,userkey)
+		values(tm_key_seq.nextval,#{t_key},sysdate,#{userKey})
+	</insert>
+	
+	<insert id="addNewTeam_team" parameterType="teamInfoDTO">
+		insert into AllTeam
+		(t_key,t_name,t_intro,t_field,t_number,t_lmemo,userkey)
+		values(t_key_seq.nextval,#{t_name},#{t_intro},#{t_field},1,'수정해주세요',#{userKey})
+	</insert>
+	
+	<insert id="addNewTeam_member" parameterType="teamInfoDTO">
+		insert into TEAMMEMBER
+		(tm_key,t_key,userkey)
+		values(tm_key_seq.nextval,#{t_key},#{userKey})
+	</insert>
+	
+	<insert id="addChallenge" parameterType="challengeDTO">
+		insert into TeamChallenge
+		(tc_key,tc_title,t_key)
+		values(tc_key_seq.nextval,#{tc_title},#{t_key})
+	</insert>
+	
+	<insert id="attendChallenge" parameterType="challengeDTO">
+		insert into TCSummary
+		(tcs_key,userkey,tc_key)
+		values(tcs_key_seq.nextval,#{userKey},#{tc_key})
+	</insert>
+	
+<!-- DELETE -->
+	
+	<delete id="removeMember" parameterType="teamMemberDTO">
+		DELETE FROM teammember
+		<where>
+		<if test="tm_key != 0 ">
+		and tm_key= #{tm_key}
+		</if>
+		<if test="userKey !=0 ">
+		and userKey= #{userKey}
+		</if>
+		and t_key = #{t_key}
+		</where>
+	</delete>
+	
+	<delete id="deleteTeam_request" parameterType="int">
+		DELETE FROM memberRequest
+		WHERE t_key= #{t_key}
+	</delete>
+	
+	<delete id="deleteTeam_member" parameterType="int">
+		DELETE FROM TEAMMEMBER
+		WHERE t_key= #{t_key}
+	</delete>
+	
+	<delete id="deleteTeam_team" parameterType="int">
+		DELETE FROM allTeam
+		WHERE t_key= #{t_key}
+	</delete>
+	
+	<delete id="deleteTeam_summary" parameterType="java.util.List">
+		DELETE FROM TCSUMMARY
+		WHERE tc_key in
+		<foreach item="tc_key" collection="list" open="(" separator="," close=")" >
+		 #{tc_key}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteTeam_challenge" parameterType="int">
+		DELETE FROM TEAMCHALLENGE
+		WHERE t_key= #{t_key}
+	</delete>
+	
+	
+	<delete id="deleteRequest" parameterType="memberRequestDTO">
+		DELETE FROM memberRequest
+		WHERE tr_key= #{tr_key}
+	</delete>
+	
+</mapper>

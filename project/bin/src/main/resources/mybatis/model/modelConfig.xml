@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<typeAliases>
+		<typeAlias type="com.spring.teampro.signupin.dto.SignUpInDTO" alias="signUpInDTO"></typeAlias>
+		<typeAlias type="com.spring.teampro.team.dto.MyTeamListDTO" alias="myTeamListDTO"></typeAlias>
+		<typeAlias type="com.spring.teampro.team.dto.TeamInfoDTO" alias="teamInfoDTO"></typeAlias>
+	</typeAliases>
+	
+</configuration>

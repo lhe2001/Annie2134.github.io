@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="mapper.member">
+
+	<!-- signUpIn 관련 쿼리  -->
+	<select id="listMembers" resultType="signUpInDTO">
+		select * from allmember		
+	</select>
+	
+	<select id="idCheck" resultType="int">
+		select count(*) 
+		from allmember 
+		where lower(id) = lower(#{id})
+	</select>
+	
+	<select id="emailCheck" resultType="int">
+		select count(*) 
+		from allmember 
+		where lower(email) = lower(#{email})
+	</select>
+	
+	<insert id="addMember" parameterType="signUpInDTO">
+		insert into allmember( userkey, id, pw, name, sex, nickname, email, joindate )
+		values( seq_userkey.nextval, #{id}, #{pw}, #{name}, #{sex}, #{nickName}, #{email}, sysdate )
+	</insert>
+	
+	<select id="signIn" resultType="string" parameterType="string">
+		select pw 
+		from allmember 
+		where lower(id) = lower(#{id})
+	</select>
+	
+	<select id="userInfo" resultType="signUpInDTO" parameterType="string">
+		select * 
+		from allmember 
+		where lower(id) = lower(#{id})
+	</select>
+	
+	<update id="updateLastTime" parameterType="string">
+
+		update allmember 
+		set lasttime=sysdate
+		where lower(id) = lower(#{id})
+	
+	</update>
+	
+	
+</mapper>

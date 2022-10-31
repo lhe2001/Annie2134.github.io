@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!-- jdbcTypeForNull 처리셋팅 -->
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+	
+	<typeAliases>
+		<typeAlias type="com.spring.teampro.signupin.dto.SignUpInDTO" alias="signUpInDTO"></typeAlias>
+<!-- 		<typeAlias type="com.spring.teampro.team.dto.MyTeamListDTO" alias="myTeamListDTO"></typeAlias> -->
+<!-- 		<typeAlias type="com.spring.teampro.team.dto.TeamInfoDTO" alias="teamInfoDTO"></typeAlias> -->
+<!-- 		<typeAlias type="com.spring.teampro.team.dto.TeamMemberDTO" alias="teamMemberDTO"></typeAlias> -->
+		<typeAlias type="com.spring.teampro.team.dto.MyTeamListDTO" alias="myTeamListDTO"></typeAlias>
+		<typeAlias type="com.spring.teampro.team.dto.TeamInfoDTO" alias="teamInfoDTO"></typeAlias>
+		<typeAlias type="com.spring.teampro.team.dto.TeamMemberDTO" alias="teamMemberDTO"></typeAlias>
+		
+<!-- JaeHyuk zone -->		
+		<!-- board DTO 별칭 -->
+		<typeAlias type="com.spring.teampro.board.dto.BoardDTO" alias="boardDTO"></typeAlias>
+		<!-- paging DTO 별칭 -->
+		<typeAlias type="com.spring.teampro.board.dto.PageDTO" alias="pageDTO"></typeAlias>
+		<!-- Comment DTO 별칭 -->
+		<typeAlias type="com.spring.teampro.board.dto.CommentDTO" alias="commentDTO"></typeAlias>
+		<typeAlias type="com.spring.teampro.mystudy.dto.MemoDTO" alias="memoDTO"></typeAlias>
+<!-- ============ -->	
+	
+		
+		<typeAlias type="com.spring.teampro.mystudy.dto.MemoDTO" alias="memoDTO"></typeAlias>
+		<typeAlias type="com.spring.teampro.signupin.dto.AdminDTO" alias="adminDTO"></typeAlias>
+<!-- <<<<<<< HEAD -->
+		<typeAlias type="com.spring.teampro.team.dto.MyTeamListDTO" alias="myTeamListDTO"></typeAlias>
+		<typeAlias type="com.spring.teampro.team.dto.TeamInfoDTO" alias="teamInfoDTO"></typeAlias>
+		<typeAlias type="com.spring.teampro.team.dto.TeamMemberDTO" alias="teamMemberDTO"></typeAlias>
+		<typeAlias type="com.spring.teampro.team.dto.ChallengeDTO" alias="challengeDTO"></typeAlias>
+<!-- ======= -->
+
+		<typeAlias type="com.spring.teampro.team.dto.MyTeamListDTO" alias="myTeamListDTO"></typeAlias>
+		<typeAlias type="com.spring.teampro.team.dto.TeamInfoDTO" alias="teamInfoDTO"></typeAlias>
+		<typeAlias type="com.spring.teampro.team.dto.TeamMemberDTO" alias="teamMemberDTO"></typeAlias>
+		<typeAlias type="com.spring.teampro.team.dto.MemberRequestDTO" alias="memberRequestDTO"></typeAlias>
+		
+		<!-- memo DTO 별칭 -->
+		<typeAlias type="com.spring.teampro.mystudy.dto.MemoDTO" alias="memoDTO"></typeAlias>
+		<typeAlias type="com.spring.teampro.mystudy.dto.ScheduleDTO" alias="scheduleDTO"></typeAlias>
+	
+<!-- >>>>>>> jessie_memo -->
+		<!-- board DTO 별칭 -->
+		<typeAlias type="com.spring.teampro.mystudy.dto.MemoDTO" alias="memoDTO"></typeAlias>
+		
+		<!-- search DTO 별칭 -->
+		<typeAlias type="com.spring.teampro.search.dto.SearchDTO" alias="searchDTO"></typeAlias>
+		
+		<!-- profile DTO 별칭 -->
+		<typeAlias type="com.spring.teampro.profile.dto.ProfileUpdateDTO" alias="profileUpdateDTO"></typeAlias>
+	</typeAliases>
+	
+
+</configuration>
